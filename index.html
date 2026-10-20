@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="男性の身長と女性のバストを出現順位で比較。カップサイズ・胸囲に対応。統計の出典と限界を明示した参考換算ツール。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="身長とバストの対応表 | PERCENTILE LAB">
+  <meta property="og:description" content="男性の身長と女性のバストは統計上どのくらい珍しい？ 出現順位を合わせた参考換算。">
+  <meta name="theme-color" content="#5750b9">
+  <meta name="author" content="ゼログラRP / John Gibson">
+  <meta name="referrer" content="no-referrer">
+  <title>身長とバストの対応表 | PERCENTILE LAB</title>
+  <style>
+    :root{color-scheme:light;--ink:#222531;--muted:#697080;--line:#e7e5e7;--brand:#5750b9;--purple:#eceaff;--pink:#e87d91;--bg:#faf9f7;--paper:#fff;--dark:#242538}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,"Noto Sans JP",sans-serif;line-height:1.72;font-size:15px}
+    button,input,select{font:inherit} input,select{font-size:16px}
+    button{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(92,76,190,.18)}
+    input,select{touch-action:manipulation;-webkit-appearance:auto}
+    .seg{min-height:50px;position:relative;z-index:2;user-select:none;-webkit-user-select:none}
+    .select{min-height:54px}
+    .number{min-height:58px}
+    .slider{min-height:36px;touch-action:auto}
+    .action-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:19px}
+    .recalc{min-height:48px;border:0;padding:10px 18px;border-radius:12px;background:#6053bf;color:white;font-weight:850}
+    .recalc:focus-visible{outline:3px solid #a3a0ef75;outline-offset:3px}
+    .action-status{font-size:12px;color:#767181;min-height:20px}
+    .copy{min-height:48px}
+    .js-warning{padding:15px 20px;background:#fff4e1;border:1px solid #ebcb94;border-radius:12px;margin:18px 0;color:#754618;font-size:14px}
+    a{color:var(--brand);text-underline-offset:3px}
+    .shell{max-width:1140px;margin:auto;padding:0 24px}
+    .mast{border-bottom:1px solid var(--line);background:#fff}
+    .mast-in{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:16px}
+    .mark{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.07em;font-size:13px}
+    .mark-logo{width:27px;height:27px;border-radius:9px;background:linear-gradient(135deg,#6b61ce,#ed8aa0);color:white;display:grid;place-items:center;font-size:18px;letter-spacing:0}
+    .mast-note{color:var(--muted);font-size:12px}
+    .intro{padding:49px 0 34px}
+    .eyebrow{display:inline-block;color:#6259a7;font-weight:800;font-size:12px;letter-spacing:.14em;margin-bottom:12px}
+    h1{font-size:clamp(31px,4.6vw,51px);font-weight:900;line-height:1.3;letter-spacing:-.045em;margin:0 0 17px}
+    h1 span{color:#7969cc}
+    .lead{color:var(--muted);font-size:15px;max-width:780px;margin:0}
+    .layout{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);align-items:stretch;gap:20px}
+    .card{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:28px;box-shadow:0 5px 22px rgba(47,41,66,.032)}
+    .card h2{font-size:17px;letter-spacing:-.025em;margin:0 0 6px}
+    .helper{font-size:12px;color:var(--muted);margin:0}
+    .controlset{margin-top:27px}
+    .control-label{display:block;font-size:12px;letter-spacing:.035em;color:#555c6a;font-weight:800;margin-bottom:12px}
+    .segments{display:flex;background:#f3f1f4;border-radius:13px;padding:4px;gap:3px}
+    .seg{flex:1;min-width:0;border:0;background:transparent;border-radius:10px;padding:10px 8px;font-weight:750;font-size:13px;color:#676578;transition:.17s}
+    .seg[aria-pressed="true"]{background:white;box-shadow:0 2px 7px #30274b17;color:#312a7c}
+    .input-row{display:flex;align-items:center;gap:12px}
+    .number{width:145px;max-width:100%;font-weight:800;letter-spacing:-.02em;color:var(--ink);font-size:31px;padding:12px 13px;border:1.5px solid #d9d6e9;background:#fff;border-radius:15px;outline:none}
+    .number:focus,select:focus-visible,.seg:focus-visible,.copy:focus-visible{outline:3px solid #a3a0ef75;outline-offset:2px}
+    .unit{font-size:16px;font-weight:750;color:#7d7b86}
+    .select{width:100%;height:61px;border:1.5px solid #d9d6e9;background:#fff;border-radius:15px;font-size:23px;padding:8px 16px;font-weight:800;color:var(--ink)}
+    .slider{width:100%;accent-color:#645ac7;margin:20px 0 5px;cursor:pointer}
+    .range-ends{display:flex;justify-content:space-between;color:#92929c;font-size:11px}
+    .hint{font-size:12px;color:#767680;line-height:1.6;margin:13px 0 0}
+    .result{border:0;background:linear-gradient(128deg,#26273e,#332c5e 77%,#53376c);color:white;padding:28px 30px;min-height:365px;position:relative;overflow:hidden}
+    .result:after{content:"";pointer-events:none;position:absolute;width:300px;height:300px;border:1px solid #ffffff22;border-radius:50%;right:-135px;top:-105px;box-shadow:0 0 0 52px #ffffff06,0 0 0 105px #ffffff04}
+    .result>:not(.decor){position:relative;z-index:1}
+    .result-label{color:#c6c4e2;letter-spacing:.11em;font-size:11px;font-weight:800}
+    .answer{font-size:clamp(40px,5vw,65px);font-weight:900;letter-spacing:-.045em;line-height:1.2;margin-top:34px;overflow-wrap:anywhere}
+    .answer small{font-size:.47em;font-weight:750;margin-left:5px;color:#d7d5f0;white-space:nowrap}
+    .answer-explain{color:#e3e0ee;font-size:13px;max-width:415px;margin-top:10px;min-height:41px}
+    .statrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid #ffffff2b;padding-top:22px;margin-top:27px}
+    .stat-label{color:#bfbdd4;font-size:11px}.stat-value{font-size:20px;font-weight:850;letter-spacing:-.025em;margin-top:2px}
+    .below{margin-top:20px}
+    .below .card{padding:25px 28px}
+    .chart-flex{display:flex;align-items:center;justify-content:space-between;gap:14px}
+    .side-note{font-size:11px;color:#8b8b95;white-space:nowrap}
+    .stack{height:24px;display:flex;border-radius:8px;overflow:hidden;margin:22px 0 17px;background:#f1f1f7}
+    .piece{height:100%;min-width:0;transition:.2s;position:relative}
+    .piece.focus{box-shadow:inset 0 0 0 3px #19152d75;filter:saturate(1.15)}
+    .piece:nth-child(1){background:#d4d0eb}.piece:nth-child(2){background:#b8b0e1}.piece:nth-child(3){background:#9285d4}.piece:nth-child(4){background:#7e6ac3}.piece:nth-child(5){background:#d486af}.piece:nth-child(6){background:#e69aa7}
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
+    th{color:#878590;text-align:left;font-weight:750;font-size:11px;padding:10px 10px;border-bottom:1px solid var(--line)}
+    td{padding:12px 10px;border-bottom:1px solid #eeeef0}
+    tr:last-child td{border-bottom:0}
+    tr.current{background:#f3f0ff;font-weight:850}
+    td:nth-child(2),td:nth-child(3),th:nth-child(2),th:nth-child(3){text-align:right}
+    .subtle{font-size:11px;color:#898896;margin-top:12px}
+    .sourcebox{margin-top:21px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px 29px}
+    .sourcebox h2{margin:0 0 10px;font-size:17px}
+    .sourcebox p{margin:9px 0;color:#585b68;font-size:13px}
+    .sourcebox ol{padding-left:21px;margin:15px 0 8px;font-size:12px;color:#727381;line-height:1.85}
+    .caution{display:flex;gap:12px;border-left:3px solid #9b91cf;background:#f5f2fc;padding:13px 16px;border-radius:0 11px 11px 0;margin-top:17px;color:#545268;font-size:12px}
+    .caution strong{color:#403c73}
+    .copy{margin-top:19px;background:#fff;border:1px solid #e5e1ea;color:#4d457b;border-radius:12px;padding:10px 18px;font-weight:800;font-size:12px}
+    .copy:hover{background:#f5f3fa}
+    .creator{margin:24px 0 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;border-radius:18px;padding:19px 23px;background:#fff;border:1px solid var(--line)}
+    .creator-name{margin:0;color:#2b2b43;font-size:15px;font-weight:850}
+    .creator-label{display:block;color:#7a758e;font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:4px}
+    .creator-link{display:inline-flex;align-items:center;min-height:44px;border-radius:10px;background:#f4f1ff;color:#4b4291;font-size:13px;font-weight:800;text-decoration:none;padding:9px 14px;overflow-wrap:anywhere}
+    .creator-link:hover,.creator-link:focus-visible{background:#eae5ff;outline:2px solid #a3a0ef75;outline-offset:2px}
+    .foot{margin:19px 0 44px;color:#9898a0;font-size:11px;text-align:center}
+    #gaussian{width:100%;height:auto;display:block;margin-top:12px}
+    #gaussian .axis{stroke:#c9c8d0;stroke-width:1.5}
+    #gaussian .curve{fill:none;stroke:#7d6acf;stroke-width:3.2;stroke-linecap:round}
+    #gaussian .shade{fill:#e4ddff;opacity:.7}
+    #gaussian .marker{stroke:#e07f9b;stroke-width:2.5;stroke-dasharray:5 4}
+    #gaussian .dot{fill:#e07f9b;stroke:white;stroke-width:2}
+    .pills{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+    .tag{font-size:11px;color:#6c648b;border:1px solid #e4e0f5;background:#f8f6ff;border-radius:50px;padding:5px 11px}
+    .sharing{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
+    .share-button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;text-align:center;background:#ffffff1c;border:1px solid #ffffff63;border-radius:12px;padding:10px 14px;color:#fff;text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap;cursor:pointer;touch-action:manipulation}
+    .share-button:focus-visible{outline:3px solid white;outline-offset:3px}
+    .share-button:hover{background:#ffffff2d}
+    .invalid-label{color:#a94747;font-size:12px;font-weight:700;margin-top:10px;min-height:18px}
+    .small-note{color:#c2bcdb;font-size:11px;line-height:1.6;margin:5px 0 0}
+    .sharing .copy{margin-top:0}
+    .banner{margin-top:20px;padding:11px 16px;border:1px solid #e7dbb6;border-radius:12px;background:#fff9e9;color:#68542a;font-size:12px}
+    .disclaimer{font-size:11px;color:#8c8894;margin-top:15px}
+    @media(max-width:440px){.sharing{gap:8px}.sharing .copy,.share-button{flex:1;min-width:120px;padding:10px 9px}.action-row>*{width:100%}}
+    [hidden]{display:none !important}
+    @media(max-width:800px){.layout{grid-template-columns:1fr}.intro{padding:35px 0 26px}.result{min-height:300px}.answer{margin-top:27px}.shell{padding:0 15px}.card{padding:21px;border-radius:19px}.result{padding:25px}.below .card{padding:20px}.sourcebox{border-radius:19px;padding:21px}.mast-in{min-height:60px}}
+    @media(max-width:440px){.mast-note{display:none}.chart-flex{display:block}.side-note{white-space:normal;margin-top:2px}.seg{font-size:12px}.answer{font-size:43px}td,th{padding-left:6px;padding-right:6px;font-size:11px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none !important;scroll-behavior:auto !important}}
+  </style>
+</head>
+<body>
+<header class="mast"><div class="shell mast-in"><div class="mark"><div class="mark-logo" aria-hidden="true">≈</div>PERCENTILE LAB</div><span class="mast-note">統計的な位置を比べる、参考換算ツール</span></div></header>
+<main class="shell">
+  <noscript><div class="js-warning">この画面ではスクリプトが無効なため、計算ツールを動かせません。ファイルを保存して Safari / Chrome で開いてください。</div></noscript>
+  <section class="intro"><div class="eyebrow">HEIGHT × BUST / STATISTICAL EQUIVALENCE</div><h1>身長とバストの<span>対応表</span></h1><p class="lead">男性の身長と女性のバストを、それぞれの集団内の<strong>出現順位（パーセンタイル）</strong>で対応づけます。数字が同じくらい珍しい場合を比べるためのツールです。</p></section>
+  <section class="layout" aria-label="換算ツール">
+    <div class="card">
+      <h2>換算する数値を入力</h2><p class="helper">入力すると自動で結果が変わります。計算はこの端末内で実行されます。</p>
+      <div class="controlset"><span class="control-label">女性のバストをどちらで表しますか？</span><div class="segments" role="group" aria-label="バストの種類"><button class="seg" id="tabCup" aria-pressed="true" type="button">カップサイズ</button><button class="seg" id="tabTop" aria-pressed="false" type="button">トップバスト（cm）</button></div></div>
+      <div class="controlset"><span class="control-label">換算する方向</span><div class="segments" role="group" aria-label="換算する方向"><button class="seg" id="tabMale" aria-pressed="true" type="button">男性の身長 → 女性</button><button class="seg" id="tabFemale" aria-pressed="false" type="button">女性のバスト → 男性</button></div></div>
+      <div class="controlset" id="heightInput"><label class="control-label" for="maleHeight">男性の身長</label><div class="input-row"><input class="number" type="number" id="maleHeight" aria-describedby="heightError" min="145" max="205" step="0.1" value="180" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" id="maleSlider" type="range" min="145" max="205" step="0.5" value="180" aria-label="男性の身長スライダー"><div class="range-ends"><span>145 cm</span><span>205 cm</span></div><p id="heightError" class="invalid-label" role="status" hidden></p></div>
+      <div class="controlset" id="cupInput" hidden><label for="cupSelect" class="control-label">女性のカップサイズ</label><select class="select" id="cupSelect"><option value="0">AA・A カップ</option><option value="1">B カップ</option><option value="2">C カップ</option><option value="3">D カップ</option><option value="4" selected>E カップ</option><option value="5">F カップ以上</option></select><p class="hint">調査が「AA・A」「F以上」をまとめているため、そのままの区分を使っています。</p></div>
+      <div class="controlset" id="topInput" hidden><label class="control-label" for="topBust">女性のトップバスト</label><div class="input-row"><input class="number" type="number" id="topBust" aria-describedby="bustError" min="60" max="125" step="0.1" value="94" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" type="range" id="topSlider" min="60" max="125" step="0.5" value="94" aria-label="女性のトップバストスライダー"><div class="range-ends"><span>60 cm</span><span>125 cm</span></div><p id="bustError" class="invalid-label" role="status" hidden></p></div>
+      <div class="action-row"><button type="button" id="recalc" class="recalc">結果を再計算</button><span id="actionStatus" class="action-status" role="status">数値や項目を変えると自動計算します</span></div>
+      <p class="hint" id="dataCaption">男性身長：20～29歳（2019年）／女性カップ：25～54歳（2011年・自己申告）</p>
+    </div>
+    <div class="card result">
+      <div class="result-label">STATISTICAL EQUIVALENT · 対応結果</div>
+      <div class="answer" id="answer" aria-live="polite" aria-atomic="true">Eカップ<small>相当</small></div>
+      <div class="answer-explain" id="explanation"></div>
+      <div class="statrow"><div><div class="stat-label">対応する出現順位</div><div class="stat-value" id="percentile">上位 9.9%</div></div><div><div class="stat-label" id="auxLabel">男性の身長偏差値</div><div class="stat-value" id="auxValue">62.9</div></div></div>
+      <div class="sharing"><button type="button" id="copy" class="copy">結果をコピー</button><button type="button" id="nativeShare" class="share-button">共有する</button><a id="xShare" class="share-button" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener noreferrer">Xで共有</a></div>
+      <p class="hint" id="copyStatus" role="status" style="color:#ece2ff"></p><p class="small-note">共有すると、表示中の結果が共有先に送られます。数値の入力だけでは送信されません。</p>
+    </div>
+  </section>
+  <section class="below" aria-label="分布データ">
+    <div class="card" id="cupDistribution"><div class="chart-flex"><h2>女性のカップサイズ分布と対応する男性の身長</h2><span class="side-note">ワコール 2011年調査 / 女性10,342人</span></div><div id="bandbar" class="stack" aria-label="カップサイズの割合を示した棒グラフ"></div><div class="table-wrap"><table><thead><tr><th>女性のカップ</th><th>回答割合</th><th>男性の身長の対応範囲（概算）</th></tr></thead><tbody id="cupRows"></tbody></table></div><div class="subtle">カップサイズは連続した数値ではなく階級データです。女性→男性の換算では、各階級の中央順位を代表値として使います。</div></div>
+    <div class="card" id="topDistribution" hidden><div class="chart-flex"><h2>出現順位をそろえる仕組み</h2><span class="side-note">産総研 1997–98年 / 19～29歳の計測結果</span></div><svg id="gaussian" viewBox="0 0 700 200" role="img" aria-label="標準正規分布と現在の順位の位置"><path id="shade" class="shade"></path><line class="axis" x1="30" y1="172" x2="672" y2="172"></line><path id="curve" class="curve"></path><line id="marker" class="marker" x1="350" y1="12" x2="350" y2="173"></line><circle id="dot" class="dot" cx="350" cy="30" r="6"></circle><text x="350" y="192" text-anchor="middle" font-size="12" fill="#9492a0">平均からの差（標準偏差単位）</text></svg><div class="pills"><span class="tag">男性身長：平均170.58cm、SD 5.36cm</span><span class="tag">女性胸囲：平均82.99cm、SD 6.20cm</span></div><div class="subtle">女性側は「乳頭位胸囲（胸周り）」の実測統計で、ブラジャーの採寸によるトップバストと一致するとは限りません。カップサイズは表しません。標本数が少なく、全国無作為抽出でもありません。</div></div>
+  </section>
+  <section class="sourcebox" aria-label="解説と出典">
+    <h2>計算方法とデータの注意点</h2>
+    <p><strong>基本：</strong>男性の身長で上から何％に入るかを求め、女性のバストで同じ順位となる範囲を返します。逆方向も同様です。身長・トップバストは、平均と標準偏差から正規分布を仮定して計算します。</p>
+    <p><strong>カップサイズ：</strong>ワコールの2011年調査（全国女性25～54歳、n=10,342、自己申告）の回答区分別比率をそのまま使っています。「F以上」は細分化できません。男性身長は厚生労働省「2019年国民健康・栄養調査」の20～29歳男性統計（平均171.5cm・標準偏差6.6cm）を使用しています。両者は同年齢層・同年の調査ではありません。</p>
+    <p><strong>トップバスト：</strong>産業技術総合研究所「AIST人体寸法データベース1997–98」の19～29歳・男性110名の身長（平均170.58cm、SD 5.36cm）と女性107名の<strong>乳頭位胸囲</strong>（平均82.99cm、SD 6.20cm）を比較しています。東京都内の専門学校生の標本で、現代の全国的な分布を代表するものではありません。ブラジャーのトップバストと測定条件が完全に同じとは限りません。</p>
+    <div class="caution"><span aria-hidden="true">ⓘ</span><span><strong>重要：</strong>カップ数は「トップバスト − アンダーバスト」の差によって決まり、トップバストだけでは求められません。カップの順位とトップバスト周囲長の順位は別物です。また、体格の価値や美しさ、魅力を測る数値ではありません。<strong>「D相当」は、その女性が実際にDカップであるという推定ではありません。</strong> 身長とカップの調査年・年齢層は一致せず、標本と正規分布近似にも限界があります。特に端の値ほど不確かです。</span></div>
+    <ol><li><a href="https://www.wacoalholdings.jp/news/newsfile/50241_1.pdf" target="_blank" rel="noopener noreferrer">ワコール「からだと下着に関する１万人白書」（2011年）</a>：カップサイズ別回答数、自己申告の注記。</li><li><a href="https://www.mhlw.go.jp/content/001066903.pdf" target="_blank" rel="noopener noreferrer">厚生労働省「2019年国民健康・栄養調査」身長・体重統計（20～29歳男性）</a>：平均・標準偏差。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98_Statistics.pdf" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」統計量</a>：青年男女の実測値。</li><li><a href="https://www.wacoal.jp/advice/contents/post-15.html" target="_blank" rel="noopener noreferrer">ワコール「ブラジャーのサイズ表」</a>：カップサイズの定義。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98/index.html" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」調査概要</a>：調査対象とサンプリング。</li></ol>
+    <p class="disclaimer">独立した非公式の参考計算サイトです。統計提供機関および元の「男女の身長対応表」サイトと提携・協賛関係はありません。各原資料の図表やデザインは転載していません。</p>
+  </section>
+  <footer aria-label="サイトの制作情報">
+    <div class="creator">
+      <div><span class="creator-label">CREATED BY / 作成者</span><p class="creator-name">ゼログラRP · John Gibson</p></div>
+      <a class="creator-link" href="https://x.com/JohnGibson18631" target="_blank" rel="noopener noreferrer" aria-label="John GibsonのXプロフィール @JohnGibson18631 を開く">X · @JohnGibson18631 ↗</a>
+    </div>
+    <p class="foot">PERCENTILE LAB · 2026-10-20 / 計算は端末内で実施・解析タグなし / 入力の自動送信・保存なし / 結果共有時は共有先に内容が送られます</p>
+  </footer>
+</main>
+<script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const counts=[1966,2930,2589,1590,742,525];
+const labels=['AA・Aカップ','Bカップ','Cカップ','Dカップ','Eカップ','Fカップ以上'];
+const n=counts.reduce((a,b)=>a+b,0);
+const bounds=[0];counts.forEach(c=>bounds.push(bounds[bounds.length-1]+c/n));
+const male={mean:171.5,sd:6.6};
+const topMale={mean:170.58,sd:5.36};
+const topWoman={mean:82.99,sd:6.2};
+const state={measure:'cup',direction:'male',lastText:'',lastUrl:''};
+const fmt=(x,d=1)=>Number(x).toFixed(d);
+const set=(id,v)=>{$(id).textContent=v;};
+function erf(x){const sign=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);return sign*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x));}
+function cdf(z){return Math.max(1e-10,Math.min(1-1e-10,(1+erf(z/Math.SQRT2))/2));}
+// Acklam's inverse standard normal approximation; symmetric and accurate across the full UI range.
+function invnorm(p){
+  p=Math.min(1-1e-10,Math.max(1e-10,p));
+  const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.357751867269,-30.66479806614716,2.506628277459239];
+  const b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572];
+  const c=[-0.007784894002430293,-0.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783];
+  const d=[0.007784695709041462,0.3224671290700398,2.445134137142996,3.754408661907416];
+  if(p<.02425){const q=Math.sqrt(-2*Math.log(p));return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p>1-.02425){const q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  const q=p-.5,r=q*q;return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+function rank(p){const percent=100*(1-p);return percent<.05?'上位 0.1%未満':percent>99.95?'上位 99.9%超':`上位 ${fmt(percent)}%`;}
+function cupIndex(p){const index=bounds.findIndex((b,i)=>i>0&&p<=b);return index<0?counts.length-1:index-1;}
+function ht(p){return male.mean+male.sd*invnorm(p);}
+function interval(i){const lo=i===0?'下限なし':`${fmt(ht(bounds[i]))}cm`;const hi=i===5?'上限なし':`${fmt(ht(bounds[i+1]))}cm`;return `${lo} ～ ${hi}`;}
+function checkNumber(id,lo,hi,errorId){
+ const input=$(id),raw=input.value.trim(),v=Number(raw);
+ const ok=raw!=='' && Number.isFinite(v) && v>=lo && v<=hi;
+ $(errorId).hidden=ok;
+ if(!ok)set(errorId,`${lo}〜${hi}cmの数値を入力してください`);
+ input.setAttribute('aria-invalid',String(!ok));
+ return ok?v:null;
+}
+function gaussian(z){
+ const sx=x=>30+(x+3.7)/7.4*642,sy=x=>172-140*Math.exp(-.5*x*x);
+ const samples=160;let path='',shade='M30 172 ';const clip=Math.max(-3.7,Math.min(3.7,z));
+ for(let i=0;i<=samples;i++){
+  const v=-3.7+7.4*i/samples;
+  path+=(i?'L':'M')+fmt(sx(v),1)+' '+fmt(sy(v),1)+' ';
+  if(v<=clip)shade+=`L${fmt(sx(v),1)} ${fmt(sy(v),1)} `;
+ }
+ shade+=`L${fmt(sx(clip),1)} ${fmt(sy(clip),1)} L${fmt(sx(clip),1)} 172 Z`;
+ $('curve').setAttribute('d',path);$('shade').setAttribute('d',shade);
+ $('marker').setAttribute('x1',sx(clip));$('marker').setAttribute('x2',sx(clip));
+ $('marker').setAttribute('y1',sy(clip));$('marker').setAttribute('y2',172);
+ $('dot').setAttribute('cx',sx(clip));$('dot').setAttribute('cy',sy(clip));
+}
+function drawCup(highlight){
+ $('bandbar').innerHTML=counts.map((c,j)=>`<div class="piece ${highlight===j?'focus':''}" style="width:${(c/n*100).toFixed(4)}%" title="${labels[j]} ${(c/n*100).toFixed(1)}%"></div>`).join('');
+ $('cupRows').innerHTML=counts.map((c,j)=>`<tr class="${highlight===j?'current':''}"><td>${labels[j]}</td><td>${fmt(c/n*100)}%</td><td>${interval(j)}</td></tr>`).join('');
+}
+function currentUrl(){
+ if(!/^https?:$/.test(location.protocol))return '';
+ const url=new URL(location.origin+location.pathname);
+ url.searchParams.set('type',state.measure);
+ url.searchParams.set('dir',state.direction);
+ if(state.direction==='male')url.searchParams.set('height',$('maleHeight').value);
+ else if(state.measure==='cup')url.searchParams.set('cup',$('cupSelect').value);
+ else url.searchParams.set('bust',$('topBust').value);
+ return url.toString();
+}
+function update(){
+ const cup=state.measure==='cup',maleToFemale=state.direction==='male';
+ $('tabCup').setAttribute('aria-pressed',String(cup));$('tabTop').setAttribute('aria-pressed',String(!cup));
+ $('tabMale').setAttribute('aria-pressed',String(maleToFemale));$('tabFemale').setAttribute('aria-pressed',String(!maleToFemale));
+ $('heightInput').hidden=!maleToFemale;$('cupInput').hidden=maleToFemale||!cup;$('topInput').hidden=maleToFemale||cup;
+ $('cupDistribution').hidden=!cup;$('topDistribution').hidden=cup;
+ set('dataCaption',cup?'男性身長：20～29歳（2019年）／女性カップ：25～54歳（2011年・自己申告）':'産総研：19～29歳の実測統計（1997–98年・小規模標本）');
+ let answer='',explain='',p,z,highlight=null,inputOK=true;
+ if(cup){
+  if(maleToFemale){
+   const h=checkNumber('maleHeight',145,205,'heightError');
+   if(h===null)inputOK=false;
+   else {z=(h-male.mean)/male.sd;p=cdf(z);highlight=cupIndex(p);
+    answer=labels[highlight];explain=`男性${fmt(h)}cmは統計モデル上で${rank(p)}。同じ出現順位に対応する女性の区分は「${answer}」です。`;}
+  }else{
+   const i=Number($('cupSelect').value);p=(bounds[i]+bounds[i+1])/2;z=invnorm(p);highlight=i;
+   answer=`${fmt(ht(p))}cm`;
+   explain=`${labels[i]}に対応する男性身長の範囲は「${interval(i)}」。表示値${fmt(ht(p))}cmは区分の中央順位を取った代表値です。`;
+  }
+ }else{
+  if(maleToFemale){
+   const h=checkNumber('maleHeight',145,205,'heightError');
+   if(h===null)inputOK=false;
+   else {z=(h-topMale.mean)/topMale.sd;p=cdf(z);const bust=topWoman.mean+z*topWoman.sd;
+    answer=`${fmt(bust)}cm`;explain=`男性身長${fmt(h)}cmと同じ標準化位置にある女性の乳頭位胸囲は約${fmt(bust)}cm。カップサイズではありません。`;}
+  }else{
+   const bust=checkNumber('topBust',60,125,'bustError');
+   if(bust===null)inputOK=false;
+   else {z=(bust-topWoman.mean)/topWoman.sd;p=cdf(z);const h=topMale.mean+z*topMale.sd;
+    answer=`${fmt(h)}cm`;explain=`女性の乳頭位胸囲${fmt(bust)}cmと同じ標準化位置にある男性身長は約${fmt(h)}cm。カップサイズとの換算ではありません。`;}
+  }
+ }
+ $('answer').replaceChildren(document.createTextNode(inputOK?answer:'—'));
+ if(inputOK){const small=document.createElement('small');small.textContent='相当';$('answer').appendChild(small);}
+ set('explanation',inputOK?explain:'範囲内の数値を入力すると、ここに結果が表示されます。');
+ set('percentile',inputOK?rank(p):'—');
+ set('auxLabel',maleToFemale?'男性の身長偏差値':'対応する偏差値');
+ set('auxValue',inputOK?fmt(50+10*z):'—');
+ if(cup)drawCup(highlight);else gaussian(inputOK?z:0);
+ $('copy').disabled=!inputOK;$('nativeShare').disabled=!inputOK;$('xShare').setAttribute('aria-disabled',String(!inputOK));
+ state.lastText=inputOK?`【身長×バストの対応表】${explain} ※異なる集団の出現順位による参考値。年齢層や調査年は一致していません。`:' ';
+ state.lastUrl=inputOK?currentUrl():'';
+ const target=(state.lastUrl?`&url=${encodeURIComponent(state.lastUrl)}`:'');
+ $('xShare').href=inputOK?`https://twitter.com/intent/tweet?text=${encodeURIComponent(state.lastText)}${target}`:'#';
+ $('copy').textContent='結果をコピー';set('copyStatus','');
+}
+function sync(id,sliderId,lo,hi){
+ const input=$(id),slider=$(sliderId);
+ const fromNumber=()=>{const v=Number(input.value);if(input.value.trim()!==''&&Number.isFinite(v)&&v>=lo&&v<=hi)slider.value=String(v);update();};
+ const fromSlider=()=>{input.value=slider.value;update();};
+ ['input','change'].forEach(t=>{input.addEventListener(t,fromNumber);slider.addEventListener(t,fromSlider);});
+ input.addEventListener('keydown',e=>{if(e.key==='Enter')input.blur();});
+}
+async function copyText(t){
+ if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+  try{await navigator.clipboard.writeText(t);return true;}catch(_e){}
+ }
+ const field=document.createElement('textarea');field.value=t;
+ field.setAttribute('readonly','');field.style.cssText='position:fixed;left:0;top:0;width:1px;height:1px;opacity:0';
+ document.body.appendChild(field);field.focus();field.select();field.setSelectionRange(0,field.value.length);
+ let success=false;try{success=document.execCommand('copy')===true;}catch(_e){}
+ field.remove();return success;
+}
+function shareBody(){return state.lastText+(state.lastUrl?'\n'+state.lastUrl:'');}
+let resetTimer;
+function feedback(message){
+ set('copyStatus',message);
+ if(resetTimer)clearTimeout(resetTimer);
+ resetTimer=setTimeout(()=>set('copyStatus',''),3500);
+}
+$('copy').addEventListener('click',async()=>{
+ const ok=await copyText(shareBody());$('copy').textContent=ok?'コピーしました':'コピーできません';
+ feedback(ok?'結果をコピーしました。XやLINEなどに貼り付けられます。':'コピーできませんでした。別のブラウザでお試しください。');
+});
+$('nativeShare').addEventListener('click',async()=>{
+ if(navigator.share){
+  try{const payload={text:state.lastText};if(state.lastUrl)payload.url=state.lastUrl;await navigator.share(payload);feedback('共有先を選択しました。');return;}
+  catch(e){if(e&&e.name==='AbortError')return;}
+ }
+ const ok=await copyText(shareBody());feedback(ok?'共有機能に非対応のため、結果をコピーしました。':'このブラウザでは共有できません。Xで共有をお試しください。');
+});
+$('xShare').addEventListener('click',e=>{if($('xShare').getAttribute('aria-disabled')==='true')e.preventDefault();});
+[['tabCup',()=>state.measure='cup'],['tabTop',()=>state.measure='top'],['tabMale',()=>state.direction='male'],['tabFemale',()=>state.direction='female']].forEach(([id,fn])=>{
+ $(id).addEventListener('click',()=>{fn();update();set('actionStatus','表示を切り替えました');});
+});
+$('recalc').addEventListener('click',()=>{update();set('actionStatus','計算結果を更新しました');});
+sync('maleHeight','maleSlider',145,205);
+sync('topBust','topSlider',60,125);
+['change','input'].forEach(t=>$('cupSelect').addEventListener(t,()=>{update();set('actionStatus','自動計算済み');}));
+// Optional shareable result URLs. No storage or automatic external request.
+try{
+ const q=new URLSearchParams(location.search);
+ const t=q.get('type'),d=q.get('dir');if(['cup','top'].includes(t))state.measure=t;
+ if(['male','female'].includes(d))state.direction=d;
+ if(q.has('height')&&Number(q.get('height'))>=145&&Number(q.get('height'))<=205)$('maleHeight').value=q.get('height');
+ if(q.has('bust')&&Number(q.get('bust'))>=60&&Number(q.get('bust'))<=125)$('topBust').value=q.get('bust');
+ if(q.has('cup')&&['0','1','2','3','4','5'].includes(q.get('cup')))$('cupSelect').value=q.get('cup');
+}catch(_e){}
+$('maleSlider').value=$('maleHeight').value;$('topSlider').value=$('topBust').value;
+update();
+})();
+</script>
+</body></html>
