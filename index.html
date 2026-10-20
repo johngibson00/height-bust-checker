@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="男性の身長・女性のバスト・男性器の長さを出現順位で比較。勃起時と通常時の実測統計にも対応した参考換算ツール。">
+  <meta name="description" content="男性の身長・女性のバスト・日本人男性の男性器の長さを統計順位で比較。バストと男性器の長さも直接・双方向で参考換算。">
   <meta property="og:type" content="website">
   <meta property="og:title" content="身長・バスト・男性器の対応表 | PERCENTILE LAB">
-  <meta property="og:description" content="身長・バスト・男性器の長さを統計的な出現順位で換算。各指標間の実測相関を意味しません。">
+  <meta property="og:description" content="女性のカップ数・胸囲と日本人男性の男性器の長さも双方向比較。統計上の順位をそろえる参考換算。">
   <meta name="theme-color" content="#5750b9">
   <meta name="author" content="ゼログラRP / John Gibson">
   <meta name="referrer" content="no-referrer">
@@ -21,6 +21,15 @@
     input,select{touch-action:manipulation;-webkit-appearance:auto}
     .seg{min-height:50px;position:relative;z-index:2;user-select:none;-webkit-user-select:none}
     .select{min-height:54px}
+    .pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+    .pair-btn{min-width:0;min-height:59px;border:1px solid #e5e0ed;border-radius:13px;background:#f8f6fa;color:#625c73;font-size:13px;font-weight:800;padding:10px 12px;text-align:center;line-height:1.45}
+    .pair-btn[aria-pressed="true"]{border-color:#7467c8;background:#f0ecff;box-shadow:0 0 0 1px #7467c8 inset;color:#453c95}
+    .pair-btn:focus-visible{outline:3px solid #a3a0ef75;outline-offset:2px}
+    #pairHeightPenis{grid-column:1 / -1}
+    .pair-btn.new-pair{background:#fff6f9;border-color:#e5cad6}
+    .pair-btn.new-pair[aria-pressed="true"]{background:#fae9f2;border-color:#ce6d9e;box-shadow:0 0 0 1px #ce6d9e inset;color:#8b3267}
+    .pair-tag{display:block;font-size:10px;line-height:1.2;color:#ab5786;font-weight:900;letter-spacing:.07em;margin-bottom:3px}
+    .pair-note{font-size:11px;color:#73707d;margin-top:8px;line-height:1.6}
     .number{min-height:58px}
     .slider{min-height:36px;touch-action:auto}
     .action-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:19px}
@@ -126,6 +135,8 @@
     #penisInput .hint{max-width:430px}
     #topDistribution .tag{white-space:normal}
     .view-options{margin-top:15px}
+    .data-warning{margin:13px 0 0;padding:12px 14px;border-radius:12px;border:1px solid #f0dcad;background:#fff9eb;font-size:12px;line-height:1.75;color:#705527}
+    .data-warning strong{color:#5b4218}
     .privacy{font-size:11px;color:#dcdaee;margin:9px 0 0}
 
     .sharing .copy{margin-top:0}
@@ -142,7 +153,7 @@
 <header class="mast"><div class="shell mast-in"><div class="mark"><div class="mark-logo" aria-hidden="true">≈</div>PERCENTILE LAB</div><span class="mast-note">統計的な位置を比べる、参考換算ツール</span></div></header>
 <main class="shell">
   <noscript><div class="js-warning">この画面ではスクリプトが無効なため、計算ツールを動かせません。ファイルを保存して Safari / Chrome で開いてください。</div></noscript>
-  <section class="intro"><div class="eyebrow">HEIGHT × BUST × PENILE LENGTH / PERCENTILE</div><h1>身長・バスト・男性器の<span>対応表</span></h1><p class="lead">男性の身長、女性のバスト、男性器の長さを、それぞれの調査集団内の<strong>出現順位（パーセンタイル）</strong>で照らし合わせる参考計算ツールです。<strong>身体の一部から、他の部位の実際の大きさは予測できません。</strong></p></section>
+  <section class="intro"><div class="eyebrow">HEIGHT × BUST × PENILE LENGTH / PERCENTILE</div><h1>身長・バスト・男性器の<span>対応表</span></h1><p class="lead">男性の身長・女性のバスト・<strong>日本人男性の男性器の長さ</strong>を、各調査での<strong>出現順位（パーセンタイル）</strong>で比較します。<strong>バストと男性器の長さを直接換算する機能</strong>も利用できます。<strong>身体の一部から、他の部位の実際の大きさは予測できません。</strong></p></section>
   <section class="layout" aria-label="換算ツール">
     <div class="card">
       <h2>換算する数値を入力</h2><p class="helper">入力すると自動で結果が変わります。計算はこの端末内で実行されます。</p>
@@ -151,13 +162,19 @@
         <p class="privacy-main">身長・バスト・男性器の長さなど、入力した数値や計算結果は運営者へ自動送信されず、このサイトにも記録・保存されません。計算は端末内で完結します。</p>
         <p class="privacy-detail">※ブラウザのページ閲覧履歴は残る場合があります。「コピー」「共有」「Xで共有」を使用した場合、結果は利用者の操作によって共有先に渡ります。</p>
       </aside>
-      <div class="controlset"><span class="control-label">何と比較しますか？</span><div class="segments" role="group" aria-label="比較する指標"><button class="seg" id="tabCup" aria-pressed="true" type="button">カップ数</button><button class="seg" id="tabTop" aria-pressed="false" type="button">胸囲（cm）</button><button class="seg" id="tabPenis" aria-pressed="false" type="button">男性器の長さ</button></div></div>
-      <div class="controlset view-options" id="erectionControls" hidden><span class="control-label">男性器の測定状態</span><div class="segments" role="group" aria-label="男性器の測定状態"><button class="seg" id="tabErect" aria-pressed="true" type="button">勃起時</button><button class="seg" id="tabFlaccid" aria-pressed="false" type="button">通常時（非勃起）</button></div><p class="hint">いずれも医療従事者が測定した研究の統計を使用しています。</p></div>
-      <div class="controlset"><span class="control-label">換算する方向</span><div class="segments" role="group" aria-label="換算する方向"><button class="seg" id="tabMale" aria-pressed="true" type="button">男性の身長 → 女性</button><button class="seg" id="tabFemale" aria-pressed="false" type="button">女性のバスト → 男性</button></div></div>
+      <div class="controlset"><span class="control-label">比較したい組み合わせを選択</span><div class="pair-grid" role="group" aria-label="比較する2つの項目">
+        <button type="button" class="pair-btn new-pair" id="pairCupPenis" aria-pressed="true"><span class="pair-tag">NEW・直接比較</span>カップ数 ↔ 男性器</button>
+        <button type="button" class="pair-btn new-pair" id="pairTopPenis" aria-pressed="false"><span class="pair-tag">NEW・直接比較</span>胸囲（cm） ↔ 男性器</button>
+        <button type="button" class="pair-btn" id="pairHeightCup" aria-pressed="false">身長 ↔ カップ数</button>
+        <button type="button" class="pair-btn" id="pairHeightTop" aria-pressed="false">身長 ↔ 胸囲（cm）</button>
+        <button type="button" class="pair-btn" id="pairHeightPenis" aria-pressed="false">身長 ↔ 男性器の長さ</button>
+      </div><p class="pair-note">下の「換算する方向」で ↔ を切り替えられます。胸囲とカップ数は別の統計です。</p></div>
+      <div class="controlset view-options" id="erectionControls" hidden><span class="control-label">男性器の測定状態</span><div class="segments" role="group" aria-label="男性器の測定状態"><button class="seg" id="tabErect" aria-pressed="true" type="button">勃起時（旧調査）</button><button class="seg" id="tabFlaccid" aria-pressed="false" type="button">通常時（実測）</button></div><p class="data-warning" id="penisDataWarning" role="note"><strong>データについて：</strong>勃起時は日本人の古い自己申告調査を用います。新しい国内研究との平均値の違いが大きく、順位換算は参考値です。</p></div>
+      <div class="controlset"><span class="control-label">換算する方向</span><div class="segments" role="group" aria-label="換算する方向"><button class="seg" id="tabMale" aria-pressed="true" type="button">女性カップ → 男性器</button><button class="seg" id="tabFemale" aria-pressed="false" type="button">男性器 → 女性カップ</button></div></div>
       <div class="controlset" id="heightInput"><label class="control-label" for="maleHeight">男性の身長</label><div class="input-row"><input class="number" type="number" id="maleHeight" autocomplete="off" aria-describedby="heightError" min="145" max="205" step="0.1" value="180" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" id="maleSlider" type="range" min="145" max="205" step="0.5" value="180" aria-label="男性の身長スライダー"><div class="range-ends"><span>145 cm</span><span>205 cm</span></div><p id="heightError" class="invalid-label" role="status" hidden></p></div>
       <div class="controlset" id="cupInput" hidden><label for="cupSelect" class="control-label">女性のカップサイズ</label><select class="select" id="cupSelect"><option value="0">AA・A カップ</option><option value="1">B カップ</option><option value="2">C カップ</option><option value="3">D カップ</option><option value="4" selected>E カップ</option><option value="5">F カップ以上</option></select><p class="hint">調査が「AA・A」「F以上」をまとめているため、そのままの区分を使っています。</p></div>
-      <div class="controlset" id="topInput" hidden><label class="control-label" for="topBust">女性のトップバスト</label><div class="input-row"><input class="number" type="number" id="topBust" autocomplete="off" aria-describedby="bustError" min="60" max="125" step="0.1" value="94" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" type="range" id="topSlider" min="60" max="125" step="0.5" value="94" aria-label="女性のトップバストスライダー"><div class="range-ends"><span>60 cm</span><span>125 cm</span></div><p id="bustError" class="invalid-label" role="status" hidden></p></div>
-      <div class="controlset" id="penisInput" hidden><label class="control-label" for="penisLength">男性器の長さ（<span id="penisInputState">勃起時</span>）</label><div class="input-row"><input class="number" type="number" id="penisLength" autocomplete="off" aria-describedby="penisError" min="5" max="24" step="0.1" value="13.1" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" type="range" id="penisSlider" min="5" max="24" step="0.1" value="13.1" aria-label="男性器の長さスライダー"><div class="range-ends"><span id="penisMin">5 cm</span><span id="penisMax">24 cm</span></div><p id="penisError" class="invalid-label" role="status" hidden></p><p class="hint">ここで使う値は、実測研究の平均と標準偏差をもとにした正規分布近似です。端の値は特に不確実です。</p></div>
+      <div class="controlset" id="topInput" hidden><label class="control-label" for="topBust">女性の胸囲（乳頭位）</label><div class="input-row"><input class="number" type="number" id="topBust" autocomplete="off" aria-describedby="bustError" min="60" max="125" step="0.1" value="94" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" type="range" id="topSlider" min="60" max="125" step="0.5" value="94" aria-label="女性のトップバストスライダー"><div class="range-ends"><span>60 cm</span><span>125 cm</span></div><p id="bustError" class="invalid-label" role="status" hidden></p><p class="hint">産総研の実測「乳頭位胸囲」を使った比較です。ブラジャーのトップバストと採寸条件が同一とは限りません。</p></div>
+      <div class="controlset" id="penisInput" hidden><label class="control-label" for="penisLength">男性器の長さ（<span id="penisInputState">勃起時</span>）</label><div class="input-row"><input class="number" type="number" id="penisLength" autocomplete="off" aria-describedby="penisError penisInputHint" min="6" max="23" step="0.1" value="13.91" inputmode="decimal"><span class="unit">cm</span></div><input class="slider" type="range" id="penisSlider" min="6" max="23" step="0.1" value="13.91" aria-label="男性器の長さスライダー"><div class="range-ends"><span id="penisMin">6 cm</span><span id="penisMax">23 cm</span></div><p id="penisError" class="invalid-label" role="status" hidden></p><p class="hint" id="penisInputHint">日本人対象の古い自己申告調査から正規分布を近似。上位割合は参考推定で、全国男性全体の厳密な順位ではありません。</p></div>
       <div class="action-row"><button type="button" id="recalc" class="recalc">結果を再計算</button><span id="actionStatus" class="action-status" role="status">数値や項目を変えると自動計算します</span></div>
       <p class="hint" id="dataCaption">男性身長：20～29歳（2019年）／女性カップ：25～54歳（2011年・自己申告）</p>
     </div>
@@ -165,24 +182,24 @@
       <div class="result-label">STATISTICAL EQUIVALENT · 対応結果</div>
       <div class="answer" id="answer" aria-live="polite" aria-atomic="true">Eカップ<small>相当</small></div>
       <div class="answer-explain" id="explanation"></div>
-      <div class="statrow"><div><div class="stat-label">対応する出現順位</div><div class="stat-value" id="percentile">上位 9.9%</div></div><div><div class="stat-label" id="auxLabel">男性の身長偏差値</div><div class="stat-value" id="auxValue">62.9</div></div></div>
-      <div class="equiv-wrap" id="equivWrap"><p class="equiv-title">同じ出現順位の参考値</p><div class="equiv-grid" id="equivGrid" aria-label="同順位の他の指標"></div><p class="equiv-desc">異なる調査集団の統計的順位を並べただけの値です。本人の別の部位の長さを予測しません。</p></div>
+      <div class="statrow"><div><div class="stat-label" id="percentileLabel">対応する出現順位</div><div class="stat-value" id="percentile">上位 9.9%</div></div><div><div class="stat-label" id="auxLabel">男性の身長偏差値</div><div class="stat-value" id="auxValue">62.9</div></div></div>
+      <div class="equiv-wrap" id="equivWrap"><p class="equiv-title">同じ出現順位の参考値（別々の調査から計算）</p><div class="equiv-grid" id="equivGrid" aria-label="同順位の他の指標"></div><p class="equiv-desc">異なる調査集団の統計的順位を並べただけの値です。本人の別の部位の長さを予測しません。男性器は日本人対象データのみを使用していますが、勃起時は古い自己申告調査で、通常時と資料の信頼性が異なります。</p></div>
       <div class="sharing"><button type="button" id="copy" class="copy">結果をコピー</button><button type="button" id="nativeShare" class="share-button">共有する</button><a id="xShare" class="share-button" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener noreferrer">Xで共有</a></div>
       <p class="hint" id="copyStatus" role="status" style="color:#ece2ff"></p><p class="small-note">入力しただけでは数値や計算結果を保存・送信しません。共有操作をすると、表示中の結果が共有先に渡ります。共有URL自体には入力値を含めません。</p>
     </div>
   </section>
   <section class="below" aria-label="分布データ">
-    <div class="card" id="cupDistribution"><div class="chart-flex"><h2>女性のカップサイズ分布と対応する男性の身長</h2><span class="side-note">ワコール 2011年調査 / 女性10,342人</span></div><div id="bandbar" class="stack" aria-label="カップサイズの割合を示した棒グラフ"></div><div class="table-wrap"><table><thead><tr><th>女性のカップ</th><th>回答割合</th><th>男性の身長の対応範囲（概算）</th></tr></thead><tbody id="cupRows"></tbody></table></div><div class="subtle">カップサイズは連続した数値ではなく階級データです。女性→男性の換算では、各階級の中央順位を代表値として使います。</div></div>
+    <div class="card" id="cupDistribution"><div class="chart-flex"><h2 id="cupChartTitle">女性のカップサイズ分布と対応する男性器の長さ</h2><span class="side-note">ワコール 2011年調査 / 女性10,342人</span></div><div id="bandbar" class="stack" aria-label="カップサイズの割合を示した棒グラフ"></div><div class="table-wrap"><table><thead><tr><th>女性のカップ</th><th>回答割合</th><th id="cupRangeTitle">男性器の対応範囲（概算）</th></tr></thead><tbody id="cupRows"></tbody></table></div><div class="subtle">カップサイズは連続値ではなく階級データです。カップからの換算は区分の中央順位を代表値として表示します。端の区分は開いた範囲です。</div></div>
     <div class="card" id="topDistribution" hidden><div class="chart-flex"><h2 id="graphTitle">出現順位をそろえる仕組み</h2><span class="side-note" id="graphSource">産総研 1997–98年 / 19～29歳の計測結果</span></div><svg id="gaussian" viewBox="0 0 700 200" role="img" aria-label="標準正規分布と現在の順位の位置"><path id="shade" class="shade"></path><line class="axis" x1="30" y1="172" x2="672" y2="172"></line><path id="curve" class="curve"></path><line id="marker" class="marker" x1="350" y1="12" x2="350" y2="173"></line><circle id="dot" class="dot" cx="350" cy="30" r="6"></circle><text x="350" y="192" text-anchor="middle" font-size="12" fill="#9492a0">平均からの差（標準偏差単位）</text></svg><div class="pills" id="graphStats"><span class="tag">男性身長：平均170.58cm、SD 5.36cm</span><span class="tag">女性胸囲：平均82.99cm、SD 6.20cm</span></div><div class="subtle" id="graphNotice">女性側は「乳頭位胸囲（胸周り）」の実測統計で、ブラジャーの採寸によるトップバストと一致するとは限りません。カップサイズは表しません。標本数が少なく、全国無作為抽出でもありません。</div></div>
   </section>
   <section class="sourcebox" aria-label="解説と出典">
     <h2>計算方法とデータの注意点</h2>
-    <p><strong>基本：</strong>入力した項目の調査集団内での上位割合を求め、別の調査集団で同じ順位となる値を表示します。身長・乳頭位胸囲・男性器の長さには正規分布近似を用います。<strong>異なる部位の長さの相関、個人の予測、診断、優劣判定ではありません。</strong></p>
+    <p><strong>基本：</strong>身長↔バスト、身長↔男性器に加え、<strong>女性のカップ数↔男性器の長さ、女性の胸囲↔男性器の長さ</strong>も双方向で換算します。入力した項目の調査集団内での上位割合を求め、別の調査集団で同じ順位となる値を表示します。身長・乳頭位胸囲・男性器の長さには正規分布近似を用います。<strong>異なる部位の長さの相関、個人の予測、診断、優劣判定ではありません。</strong></p>
     <p><strong>カップサイズ：</strong>ワコールの2011年調査（全国女性25～54歳、n=10,342、自己申告）の回答区分別比率をそのまま使っています。「F以上」は細分化できません。男性身長は厚生労働省「2019年国民健康・栄養調査」の20～29歳男性統計（平均171.5cm・標準偏差6.6cm）を使用しています。両者は同年齢層・同年の調査ではありません。</p>
     <p><strong>トップバスト：</strong>産業技術総合研究所「AIST人体寸法データベース1997–98」の19～29歳・男性110名の身長（平均170.58cm、SD 5.36cm）と女性107名の<strong>乳頭位胸囲</strong>（平均82.99cm、SD 6.20cm）を比較しています。東京都内の専門学校生の標本で、現代の全国的な分布を代表するものではありません。ブラジャーのトップバストと測定条件が完全に同じとは限りません。</p>
-    <p><strong>男性器の長さ：</strong>Vealeら（2015年）の17研究を対象とした系統的レビューを使用。医療従事者が測定したデータの統合値です。<strong>勃起時</strong>：692人、平均13.12cm、標準偏差1.66cm。<strong>通常時（非勃起）</strong>：10,704人、平均9.16cm、標準偏差1.57cm。全研究合計の「最大15,521人」は勃起時の標本数ではありません。国際的な調査結果であり、日本人成人男性に限定した推定値ではありません。温度・測定手順・勃起の状態等で数値は変わります。</p>
-    <div class="caution"><span aria-hidden="true">ⓘ</span><span><strong>重要：</strong>カップ数は「トップバスト − アンダーバスト」の差によって決まり、トップバストだけでは求められません。カップの順位とトップバスト周囲長の順位は別物です。また、体格の価値や美しさ、魅力を測る数値ではありません。<strong>「D相当」は、その女性が実際にDカップであるという推定ではありません。</strong> 身長とカップの調査年・年齢層は一致せず、標本と正規分布近似にも限界があります。特に端の値ほど不確かです。男性器についても、身長が高ければ男性器が長いという個人予測はできません。調査集団ごとの順位が偶然一致するだけです。年齢や母集団の違いを十分に補正していません。</span></div>
-    <ol><li><a href="https://www.wacoalholdings.jp/news/newsfile/50241_1.pdf" target="_blank" rel="noopener noreferrer">ワコール「からだと下着に関する１万人白書」（2011年）</a>：カップサイズ別回答数、自己申告の注記。</li><li><a href="https://www.mhlw.go.jp/content/001066903.pdf" target="_blank" rel="noopener noreferrer">厚生労働省「2019年国民健康・栄養調査」身長・体重統計（20～29歳男性）</a>：平均・標準偏差。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98_Statistics.pdf" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」統計量</a>：青年男女の実測値。</li><li><a href="https://www.wacoal.jp/advice/contents/post-15.html" target="_blank" rel="noopener noreferrer">ワコール「ブラジャーのサイズ表」</a>：カップサイズの定義。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98/index.html" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」調査概要</a>：調査対象とサンプリング。</li><li><a href="https://pubmed.ncbi.nlm.nih.gov/25487360/" target="_blank" rel="noopener noreferrer">Veale et al., BJU International（2015年）PMID:25487360</a>：男性器の勃起時・非勃起時長の実測統合データ（標本数・平均・標準偏差）。</li></ol>
+    <p><strong>男性器の長さ：国内の日本人男性対象データのみを使用。</strong> <strong>通常時（非勃起）</strong>：白井・猪股・永尾ら（2008年）の日本人男性241人（21〜86歳、性機能外来患者）の医療者実測結果をもとに平均8.20cm・標準偏差1.21cmで近似します。<strong>勃起時</strong>：矢島ら（1995年発表、1981年に調査）の日本人男性の<strong>自己申告</strong>データ、平均13.91cm・標準偏差1.65cmで近似します。勃起時の調査は古く、測定者実測ではありません。また、末富ら（2022年）の泌尿器科外来患者186人では<strong>自己申告した勃起時の平均12.5cm</strong>と報告されており、調査間で平均が異なります。同研究の公開抄録には勃起時の標準偏差がなく、現在の一般的な日本人男性の厳密な分布や順位は算出できません。</p>
+    <div class="caution"><span aria-hidden="true">ⓘ</span><span><strong>重要：</strong>カップ数は「トップバスト − アンダーバスト」の差によって決まり、トップバストだけでは求められません。カップの順位とトップバスト周囲長の順位は別物です。また、体格の価値や美しさ、魅力を測る数値ではありません。<strong>「D相当」は、その女性が実際にDカップであるという推定ではありません。</strong> また「Dカップ→○cm」も、バストと男性器の大きさに実際の関係があるという意味ではありません。 身長とカップの調査年・年齢層は一致せず、標本と正規分布近似にも限界があります。特に端の値ほど不確かです。男性器についても、身長が高ければ男性器が長いという個人予測はできません。日本人男性の臨床標本と旧調査を使うため、全国人口のパーセンタイルではなく、調査標本に基づく粗い近似です。<strong>特に勃起時の結果は古い自己申告データで、新しい国内研究の平均と一致しないため、不確実性が大きくなります。</strong></span></div>
+    <ol><li><a href="https://www.wacoalholdings.jp/news/newsfile/50241_1.pdf" target="_blank" rel="noopener noreferrer">ワコール「からだと下着に関する１万人白書」（2011年）</a>：カップサイズ別回答数、自己申告の注記。</li><li><a href="https://www.mhlw.go.jp/content/001066903.pdf" target="_blank" rel="noopener noreferrer">厚生労働省「2019年国民健康・栄養調査」身長・体重統計（20～29歳男性）</a>：平均・標準偏差。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98_Statistics.pdf" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」統計量</a>：青年男女の実測値。</li><li><a href="https://www.wacoal.jp/advice/contents/post-15.html" target="_blank" rel="noopener noreferrer">ワコール「ブラジャーのサイズ表」</a>：カップサイズの定義。</li><li><a href="https://www.airc.aist.go.jp/dhrt/97-98/index.html" target="_blank" rel="noopener noreferrer">産業技術総合研究所「AIST人体寸法データベース1997–98」調査概要</a>：調査対象とサンプリング。</li><li><a href="https://cir.nii.ac.jp/crid/1572543025576500224" target="_blank" rel="noopener noreferrer">白井・猪股・永尾（2008年）「日本の成人男性の陰茎計測値について」</a>：通常時・日本人男性241人の医療者実測研究。平均・標準偏差は<a href="https://www.life-cl.com/glossary/ni/size-of-japanese-male-penis.html" target="_blank" rel="noopener noreferrer">新宿ライフクリニックによる研究紹介</a>も参照。</li><li><a href="https://cir.nii.ac.jp/crid/1572261550137637760" target="_blank" rel="noopener noreferrer">矢島ら（1995年）「日本人の陰茎のサイズに関する検討」</a>：1981年の自己申告による勃起時長の研究。平均・標準偏差の公開二次資料として<a href="https://note.com/penis_science/n/n5cb7f976f2cb" target="_blank" rel="noopener noreferrer">国内研究の整理記事（2026年）</a>を参照。</li><li><a href="https://doi.org/10.1016/j.jsxm.2022.03.486" target="_blank" rel="noopener noreferrer">Suetomi et al.（2022年）Journal of Sexual Medicine</a>：日本人の泌尿器科外来患者186人における勃起時長・自己申告平均12.5cm。標準偏差は公開抄録に未記載。</li></ol>
     <p class="disclaimer">独立した非公式の参考計算サイトです。統計提供機関および元の「男女の身長対応表」サイトと提携・協賛関係はありません。各原資料の図表やデザインは転載していません。</p>
   </section>
   <footer aria-label="サイトの制作情報">
@@ -190,7 +207,7 @@
       <div><span class="creator-label">CREATED BY / 作成者</span><p class="creator-name">ゼログラRP · John Gibson</p></div>
       <a class="creator-link" href="https://x.com/JohnGibson18631" target="_blank" rel="noopener noreferrer" aria-label="John GibsonのXプロフィール @JohnGibson18631 を開く">X · @JohnGibson18631 ↗</a>
     </div>
-    <p class="foot">PERCENTILE LAB · 2026-10-20 / 端末内計算・入力履歴のサイト内保存なし / 閲覧履歴や利用者による共有は別</p>
+    <p class="foot">PERCENTILE LAB · v6 / 端末内計算・入力履歴のサイト内保存なし / 閲覧履歴や利用者による共有は別</p>
   </footer>
 </main>
 <script>
@@ -204,8 +221,19 @@ const bounds=[0];counts.forEach(c=>bounds.push(bounds[bounds.length-1]+c/n));
 const male={mean:171.5,sd:6.6};
 const topMale={mean:170.58,sd:5.36};
 const topWoman={mean:82.99,sd:6.2};
-const penisStats={erect:{mean:13.12,sd:1.66,label:'勃起時',min:5,max:24,n:692},flaccid:{mean:9.16,sd:1.57,label:'通常時',min:2,max:18,n:10704}};
-const state={measure:'cup',direction:'male',penisState:'erect',lastText:'',lastUrl:''};
+const penisStats={
+ erect:{mean:13.91,sd:1.65,label:'勃起時・旧自己申告調査',min:6,max:23,source:'矢島ら（1995年発表・1981年調査）',quality:'古い自己申告調査'},
+ flaccid:{mean:8.20,sd:1.21,label:'通常時・医療者実測',min:2,max:16,source:'白井ら（2008年、n=241）',quality:'性機能外来患者を対象とする実測'}
+};
+const pairs={
+ heightCup:{left:'height',right:'cup',name:'身長 ↔ 女性のカップ数'},
+ heightTop:{left:'height',right:'top',name:'身長 ↔ 女性の胸囲'},
+ heightPenis:{left:'height',right:'penis',name:'身長 ↔ 男性器の長さ'},
+ cupPenis:{left:'cup',right:'penis',name:'女性のカップ数 ↔ 男性器の長さ'},
+ topPenis:{left:'top',right:'penis',name:'女性の胸囲 ↔ 男性器の長さ'}
+};
+const labelFor={height:'男性の身長',cup:'女性のカップ数',top:'女性の乳頭位胸囲',penis:'男性器の長さ'};
+const state={pair:'cupPenis',direction:'forward',penisState:'erect',lastText:'',lastUrl:''};
 const fmt=(x,d=1)=>Number(x).toFixed(d);
 const set=(id,v)=>{$(id).textContent=v;};
 function erf(x){const sign=x<0?-1:1;x=Math.abs(x);const t=1/(1+0.3275911*x);return sign*(1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x));}
@@ -224,7 +252,18 @@ function invnorm(p){
 function rank(p){const percent=100*(1-p);return percent<.05?'上位 0.1%未満':percent>99.95?'上位 99.9%超':`上位 ${fmt(percent)}%`;}
 function cupIndex(p){const index=bounds.findIndex((b,i)=>i>0&&p<=b);return index<0?counts.length-1:index-1;}
 function ht(p){return male.mean+male.sd*invnorm(p);}
-function interval(i){const lo=i===0?'下限なし':`${fmt(ht(bounds[i]))}cm`;const hi=i===5?'上限なし':`${fmt(ht(bounds[i+1]))}cm`;return `${lo} ～ ${hi}`;}
+function metricAt(kind,p,pairKey,condition){
+ const z=invnorm(p);
+ if(kind==='height'){const series=pairKey==='heightTop'?topMale:male;return series.mean+series.sd*z;}
+ if(kind==='top')return topWoman.mean+topWoman.sd*z;
+ if(kind==='penis'){const series=penisStats[condition];return series.mean+series.sd*z;}
+ return cupIndex(p);
+}
+function intervalFor(i,target,pairKey,condition){
+ const lo=i===0?'下限なし':`${fmt(metricAt(target,bounds[i],pairKey,condition))}cm`;
+ const hi=i===5?'上限なし':`${fmt(metricAt(target,bounds[i+1],pairKey,condition))}cm`;
+ return `${lo} ～ ${hi}`;
+}
 function checkNumber(id,lo,hi,errorId){
  const input=$(id),raw=input.value.trim(),v=Number(raw);
  const ok=raw!=='' && Number.isFinite(v) && v>=lo && v<=hi;
@@ -247,9 +286,9 @@ function gaussian(z){
  $('marker').setAttribute('y1',sy(clip));$('marker').setAttribute('y2',172);
  $('dot').setAttribute('cx',sx(clip));$('dot').setAttribute('cy',sy(clip));
 }
-function drawCup(highlight){
+function drawCup(highlight,target,condition){
  $('bandbar').innerHTML=counts.map((c,j)=>`<div class="piece ${highlight===j?'focus':''}" style="width:${(c/n*100).toFixed(4)}%" title="${labels[j]} ${(c/n*100).toFixed(1)}%"></div>`).join('');
- $('cupRows').innerHTML=counts.map((c,j)=>`<tr class="${highlight===j?'current':''}"><td>${labels[j]}</td><td>${fmt(c/n*100)}%</td><td>${interval(j)}</td></tr>`).join('');
+ $('cupRows').innerHTML=counts.map((c,j)=>`<tr class="${highlight===j?'current':''}"><td>${labels[j]}</td><td>${fmt(c/n*100)}%</td><td>${intervalFor(j,target,state.pair,condition)}</td></tr>`).join('');
 }
 function currentUrl(){
  // Use a clean site URL for all shares. No entered measurements in URL, query, or history.
@@ -259,7 +298,7 @@ function currentUrl(){
 function renderEquivalents(p,condition,valid){
  if(!valid){$('equivWrap').hidden=true;return;}
  $('equivWrap').hidden=false;
- const heightSeries=state.measure==='top'?topMale:male;
+ const heightSeries=state.pair==='heightTop'?topMale:male;
  const h=heightSeries.mean+heightSeries.sd*invnorm(p);
  const i=cupIndex(p);
  const top=topWoman.mean+topWoman.sd*invnorm(p);
@@ -282,25 +321,32 @@ function renderEquivalents(p,condition,valid){
  }
 }
 function update(){
- const cup=state.measure==='cup',top=state.measure==='top',penis=state.measure==='penis';
- const maleToOther=state.direction==='male', condition=state.penisState, penisStat=penisStats[condition];
- $('tabCup').setAttribute('aria-pressed',String(cup));
- $('tabTop').setAttribute('aria-pressed',String(top));
- $('tabPenis').setAttribute('aria-pressed',String(penis));
- $('tabMale').setAttribute('aria-pressed',String(maleToOther));
- $('tabFemale').setAttribute('aria-pressed',String(!maleToOther));
- $('tabMale').textContent=penis?'男性の身長 → 男性器': '男性の身長 → 女性';
- $('tabFemale').textContent=penis?'男性器 → 男性の身長':'女性のバスト → 男性';
- $('erectionControls').hidden=!penis;
+ const pair=pairs[state.pair];
+ const condition=state.penisState,penisStat=penisStats[condition];
+ const from=state.direction==='forward'?pair.left:pair.right;
+ const to=state.direction==='forward'?pair.right:pair.left;
+ const includesPenis=pair.left==='penis'||pair.right==='penis';
+ const includesCup=pair.left==='cup'||pair.right==='cup';
+ const includesTop=pair.left==='top'||pair.right==='top';
+ for(const key of Object.keys(pairs)){
+   const id='pair'+key.charAt(0).toUpperCase()+key.slice(1);
+   $(id).setAttribute('aria-pressed',String(state.pair===key));
+ }
+ $('tabMale').setAttribute('aria-pressed',String(state.direction==='forward'));
+ $('tabFemale').setAttribute('aria-pressed',String(state.direction==='reverse'));
+ $('tabMale').textContent=`${labelFor[pair.left]} → ${labelFor[pair.right]}`;
+ $('tabFemale').textContent=`${labelFor[pair.right]} → ${labelFor[pair.left]}`;
+ $('erectionControls').hidden=!includesPenis;
  $('tabErect').setAttribute('aria-pressed',String(condition==='erect'));
  $('tabFlaccid').setAttribute('aria-pressed',String(condition==='flaccid'));
- $('heightInput').hidden=!maleToOther;
- $('cupInput').hidden=maleToOther||!cup;
- $('topInput').hidden=maleToOther||!top;
- $('penisInput').hidden=maleToOther||!penis;
- $('cupDistribution').hidden=!cup;
- $('topDistribution').hidden=cup;
- // Change slider limits only on mode changes, preserving independently-entered values.
+ set('penisDataWarning',condition==='erect'?'注意：勃起時は1995年発表（1981年調査）の日本人自己申告データ（13.91±1.65cm）で参考換算します。2022年の別の国内研究では自己申告平均12.5cmで、結果には大きな不確実性があります。':'日本人の性機能外来患者241人を医療者が測定（2008年、8.20±1.21cm）。全国一般男性を無作為に調べた調査ではありません。');
+ set('penisInputHint',condition==='erect'?'日本人の古い自己申告調査の平均・標準偏差による正規分布近似です。全国男性の厳密な上位割合は算出できません。':'日本人患者241人の医療者実測による正規分布近似です。全国男性の厳密な上位割合は算出できません。');
+ $('heightInput').hidden=from!=='height';
+ $('cupInput').hidden=from!=='cup';
+ $('topInput').hidden=from!=='top';
+ $('penisInput').hidden=from!=='penis';
+ $('cupDistribution').hidden=!includesCup;
+ $('topDistribution').hidden=includesCup;
  $('penisInputState').textContent=penisStat.label;
  if($('penisLength').min!==String(penisStat.min)){
    $('penisLength').min=String(penisStat.min);$('penisLength').max=String(penisStat.max);
@@ -310,66 +356,69 @@ function update(){
    $('penisLength').value=String(penisStat.mean);
    $('penisSlider').value=String(penisStat.mean);
  }
- const captions={cup:'男性身長：20～29歳（2019年）／女性カップ：25～54歳（2011年・自己申告）',top:'産総研：19～29歳の実測統計（1997–98年・小規模標本）',penis:`男性身長：日本の20～29歳（2019年）／男性器：国際データ（2015年、${penisStat.label} n=${penisStat.n.toLocaleString('ja-JP')}）`};
- set('dataCaption',captions[state.measure]);
- if(!cup){
-  if(top){
+ const cap=[];
+ if(pair.left==='height'||pair.right==='height')cap.push(state.pair==='heightTop'?'男性身長：産総研（1997〜98年）':'男性身長：国民健康・栄養調査（2019年・20〜29歳）');
+ if(includesCup)cap.push('女性カップ：ワコール（2011年、25〜54歳・自己申告）');
+ if(includesTop)cap.push('女性乳頭位胸囲：産総研（1997〜98年・小規模標本）');
+ if(includesPenis)cap.push(`男性器：日本人対象 ${penisStat.source}（${penisStat.quality}）`);
+ set('dataCaption',cap.join('／'));
+ if(includesCup){
+   set('cupChartTitle',`女性のカップサイズ分布と対応する${to==='cup'?labelFor[from]:labelFor[to]}`);
+   const cmp=(pair.left==='cup'?pair.right:pair.left);
+   set('cupRangeTitle',`${labelFor[cmp]}の対応範囲（概算）`);
+ } else if(includesTop&&!includesPenis){
    set('graphTitle','出現順位をそろえる仕組み');set('graphSource','産総研 1997–98年 / 19～29歳');
    $('graphStats').innerHTML='<span class="tag">男性身長：平均170.58cm、SD 5.36cm</span><span class="tag">女性胸囲：平均82.99cm、SD 6.20cm</span>';
    set('graphNotice','女性側は乳頭位胸囲の実測統計です。ブラジャーの採寸によるトップバストと一致するとは限りません。カップサイズを表しません。');
-  }else{
-   set('graphTitle','男性器の長さと出現順位');set('graphSource',`Vealeら 2015年 / ${penisStat.label} n=${penisStat.n.toLocaleString('ja-JP')}`);
-   $('graphStats').innerHTML=`<span class="tag">男性器（${penisStat.label}）：平均${fmt(penisStat.mean,2)}cm、SD ${fmt(penisStat.sd,2)}cm</span><span class="tag">男性身長（日本・20～29歳）：平均171.5cm、SD 6.6cm</span>`;
-   set('graphNotice','異なる母集団の順位の比較です。身長から陰茎長を予測するものではありません。勃起時は692名、通常時は10,704名の実測統合統計。正規分布の端では推定精度が低くなります。');
-  }
+ } else if(includesPenis){
+   set('graphTitle',`男性器の長さと${includesTop?'胸囲':'身長'}の参考出現順位`);set('graphSource',`${penisStat.source} / 日本人男性を対象`);
+   $('graphStats').innerHTML=`<span class="tag">男性器（${penisStat.label}）：平均${fmt(penisStat.mean,2)}cm、SD ${fmt(penisStat.sd,2)}cm</span><span class="tag">${includesTop?'女性乳頭位胸囲：平均82.99cm、SD 6.20cm':'男性身長（日本・20～29歳）：平均171.5cm、SD 6.6cm'}</span>`;
+   set('graphNotice',condition==='erect'?'1981年の古い日本人自己申告調査による正規分布近似。2022年の別の日本人研究では勃起時平均12.5cmです。全国人口での厳密な順位ではありません。':'性機能外来を受診した日本人男性241人の実測値による正規分布近似。全国の無作為標本ではありません。');
  }
- let answer='',explain='',p,z,highlight=null,inputOK=true;
- if(cup){
-  if(maleToOther){
-   const h=checkNumber('maleHeight',145,205,'heightError');
-   if(h===null)inputOK=false;
-   else{z=(h-male.mean)/male.sd;p=cdf(z);highlight=cupIndex(p);
-    answer=labels[highlight];explain=`男性${fmt(h)}cmは統計モデル上で${rank(p)}。同じ出現順位に対応する女性の区分は「${answer}」です。`;}
-  }else{
-   const i=Number($('cupSelect').value);p=(bounds[i]+bounds[i+1])/2;z=invnorm(p);highlight=i;
-   answer=`${fmt(ht(p))}cm`;explain=`${labels[i]}に対応する男性身長の範囲は「${interval(i)}」。表示値は区分の中央順位を用いた代表値です。`;
-  }
- }else if(top){
-  if(maleToOther){
-   const h=checkNumber('maleHeight',145,205,'heightError');
-   if(h===null)inputOK=false;
-   else{z=(h-topMale.mean)/topMale.sd;p=cdf(z);const bust=topWoman.mean+z*topWoman.sd;
-    answer=`${fmt(bust)}cm`;explain=`男性身長${fmt(h)}cmと同じ標準化位置にある女性の乳頭位胸囲は約${fmt(bust)}cm。カップサイズではありません。`;}
-  }else{
-   const bust=checkNumber('topBust',60,125,'bustError');
-   if(bust===null)inputOK=false;
-   else{z=(bust-topWoman.mean)/topWoman.sd;p=cdf(z);const h=topMale.mean+z*topMale.sd;
-    answer=`${fmt(h)}cm`;explain=`女性の乳頭位胸囲${fmt(bust)}cmと同じ標準化位置にある男性身長は約${fmt(h)}cm。`;}
-  }
- }else{
-  if(maleToOther){
-   const h=checkNumber('maleHeight',145,205,'heightError');
-   if(h===null)inputOK=false;
-   else{z=(h-male.mean)/male.sd;p=cdf(z);const v=penisStat.mean+z*penisStat.sd;
-    answer=`約 ${fmt(v)}cm`;explain=`男性身長${fmt(h)}cmと、男性器（${penisStat.label}）の統計分布で同じ出現順位に当たる長さです。身長からの個人予測ではありません。`;}
-  }else{
-   const v=checkNumber('penisLength',penisStat.min,penisStat.max,'penisError');
-   if(v===null)inputOK=false;
-   else{z=(v-penisStat.mean)/penisStat.sd;p=cdf(z);
-    answer=`約 ${fmt(ht(p))}cm`;explain=`男性器（${penisStat.label}）${fmt(v)}cmと同じ出現順位に対応する日本の20～29歳男性の身長の参考値です。`;}
-  }
+ let p,z,inputValue,highlight=null,inputOK=true,answer='',explain='';
+ if(from==='height')inputValue=checkNumber('maleHeight',145,205,'heightError');
+ else if(from==='top')inputValue=checkNumber('topBust',60,125,'bustError');
+ else if(from==='penis')inputValue=checkNumber('penisLength',penisStat.min,penisStat.max,'penisError');
+ else inputValue=Number($('cupSelect').value);
+ if(inputValue===null){inputOK=false;}else{
+   if(from==='cup'){
+     p=(bounds[inputValue]+bounds[inputValue+1])/2;
+     z=invnorm(p);
+     highlight=inputValue;
+   }else{
+     const series=from==='height'?(state.pair==='heightTop'?topMale:male):from==='top'?topWoman:penisStat;
+     z=(inputValue-series.mean)/series.sd;
+     p=cdf(z);
+     highlight=cupIndex(p);
+   }
+   const converted=metricAt(to,p,state.pair,condition);
+   answer=to==='cup'?labels[converted]:`${to==='penis'?'約 ':''}${fmt(converted)}cm`;
+   if(from==='cup'){
+     const band=intervalFor(inputValue,to,state.pair,condition);
+     explain=`${labels[inputValue]}の区分の中央順位に相当する${labelFor[to]}は${answer}。区分全体の参考範囲は「${band}」です。カップ別人数を使った大まかな換算です。`;
+   }else if(to==='cup'){
+     explain=`${labelFor[from]}${fmt(inputValue)}cmと同じ参考出現順位に対応する女性のカップ区分は「${answer}」です。`;
+   }else{
+     explain=`${labelFor[from]}${fmt(inputValue)}cmと同じ参考出現順位に対応する${labelFor[to]}の値は${answer}です。`;
+   }
+   if(from==='penis'||to==='penis')explain+=' 男性器の統計は日本人対象の研究を使用していますが、全国男性を代表する厳密な順位ではありません。';
+   if(includesPenis&&condition==='erect')explain+=' ※勃起時は古い自己申告調査を使っています。';
+   if(Math.abs(z)>2.3)explain+=' ※分布の端のため推定誤差が大きくなります。';
  }
  $('answer').replaceChildren(document.createTextNode(inputOK?answer:'—'));
  if(inputOK){const small=document.createElement('small');small.textContent='相当';$('answer').appendChild(small);}
- if(inputOK&&Math.abs(z)>2.3)explain+=' ※分布の端のため推定誤差が大きくなります。';
  set('explanation',inputOK?explain:'範囲内の数値を入力すると、ここに結果が表示されます。');
  set('percentile',inputOK?rank(p):'—');
- set('auxLabel',maleToOther?'入力した身長の偏差値':'対応する偏差値');
+ set('percentileLabel',includesPenis?'調査標本をもとにした推定順位':'対応する出現順位');
+ set('auxLabel',from==='cup'?'カップ区分の中央偏差値':'入力値の参考偏差値');
  set('auxValue',inputOK?fmt(50+10*z):'—');
- if(cup)drawCup(highlight);else gaussian(inputOK?z:0);
+ if(includesCup){
+   const comparison=pair.left==='cup'?pair.right:pair.left;
+   drawCup(inputOK?highlight:null,comparison,condition);
+ }else gaussian(inputOK?z:0);
  renderEquivalents(p,condition,inputOK);
  $('copy').disabled=!inputOK;$('nativeShare').disabled=!inputOK;$('xShare').setAttribute('aria-disabled',String(!inputOK));
- state.lastText=inputOK?`【身長・バスト・男性器の対応表】${explain} 出現順位：${rank(p)}。※異なる集団の統計による参考値で、身体の個人予測ではありません。`:' ';
+ state.lastText=inputOK?`【身長・バスト・男性器の対応表】${pair.name}：${explain} 参考出現順位：${rank(p)}。※統計モデル上の目安。日本人調査の標本・調査年の制約があり、個人の身体を予測するものではありません。`:'';
  state.lastUrl=inputOK?currentUrl():'';
  const target=state.lastUrl?`&url=${encodeURIComponent(state.lastUrl)}`:'';
  $('xShare').href=inputOK?`https://twitter.com/intent/tweet?text=${encodeURIComponent(state.lastText)}${target}`:'#';
@@ -411,25 +460,28 @@ $('nativeShare').addEventListener('click',async()=>{
  const ok=await copyText(shareBody());feedback(ok?'共有機能に非対応のため、結果をコピーしました。':'このブラウザでは共有できません。Xで共有をお試しください。');
 });
 $('xShare').addEventListener('click',e=>{if($('xShare').getAttribute('aria-disabled')==='true')e.preventDefault();});
-[['tabCup',()=>state.measure='cup'],['tabTop',()=>state.measure='top'],['tabPenis',()=>state.measure='penis'],['tabErect',()=>state.penisState='erect'],['tabFlaccid',()=>state.penisState='flaccid'],['tabMale',()=>state.direction='male'],['tabFemale',()=>state.direction='female']].forEach(([id,fn])=>{
+[
+ ['pairHeightCup',()=>state.pair='heightCup'],
+ ['pairHeightTop',()=>state.pair='heightTop'],
+ ['pairHeightPenis',()=>state.pair='heightPenis'],
+ ['pairCupPenis',()=>state.pair='cupPenis'],
+ ['pairTopPenis',()=>state.pair='topPenis'],
+ ['tabErect',()=>state.penisState='erect'],
+ ['tabFlaccid',()=>state.penisState='flaccid'],
+ ['tabMale',()=>state.direction='forward'],
+ ['tabFemale',()=>state.direction='reverse']
+].forEach(([id,fn])=>{
  $(id).addEventListener('click',()=>{fn();update();set('actionStatus','表示を切り替えました');});
 });
 $('recalc').addEventListener('click',()=>{update();set('actionStatus','計算結果を更新しました');});
 sync('maleHeight','maleSlider',145,205);
 sync('topBust','topSlider',60,125);
-sync('penisLength','penisSlider',2,24);
+sync('penisLength','penisSlider',2,23);
 ['change','input'].forEach(t=>$('cupSelect').addEventListener(t,()=>{update();set('actionStatus','自動計算済み');}));
-// Legacy result links may still be read; newly generated share URLs never contain measurements.
-try{
- const q=new URLSearchParams(location.search);
- const t=q.get('type'),d=q.get('dir');if(['cup','top','penis'].includes(t))state.measure=t;
- if(['erect','flaccid'].includes(q.get('condition')))state.penisState=q.get('condition');
- if(['male','female'].includes(d))state.direction=d;
- if(q.has('height')&&Number(q.get('height'))>=145&&Number(q.get('height'))<=205)$('maleHeight').value=q.get('height');
- if(q.has('bust')&&Number(q.get('bust'))>=60&&Number(q.get('bust'))<=125)$('topBust').value=q.get('bust');
- if(q.has('cup')&&['0','1','2','3','4','5'].includes(q.get('cup')))$('cupSelect').value=q.get('cup');
-}catch(_e){}
-$('maleSlider').value=$('maleHeight').value;$('topSlider').value=$('topBust').value;$('penisSlider').value=$('penisLength').value;
+// 入力値や画面状態はURL/保存領域に記録しません。
+$('maleSlider').value=$('maleHeight').value;
+$('topSlider').value=$('topBust').value;
+$('penisSlider').value=$('penisLength').value;
 update();
 })();
 </script>
